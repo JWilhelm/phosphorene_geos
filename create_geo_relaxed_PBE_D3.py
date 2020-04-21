@@ -1,7 +1,19 @@
 import numpy as np
+import subprocess
+import os
+import time
+
+################################################
+#                                              #
+#   Please run this script with the command    #
+#                                              #
+#   create_geo_relaxed_PBE_D3.py | tee P.xyz   #
+#                                              #
+################################################
 
 def main():
 
+   # you can change here L to get a larger phosphorene sheet
    L = 4
 
    a = 3.299
@@ -33,7 +45,8 @@ def main():
 
          for i_atom in range(np.size(coords_P_phosphorene[:,0])):
              atom_coord = coords_P_phosphorene[i_atom,:] + R_vec
-             print("P  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+             with open("P.xyz", "a") as myfile:
+               print("P  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
 
              if np.abs(atom_coord[0] - x_min) <eps:
                 print("H  ", '{:12.6f}'.format(atom_coord[0]-bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
@@ -44,7 +57,8 @@ def main():
              if np.abs(atom_coord[1] - y_max) <eps:
                 print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]+bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) )
 
-
+   os.system("sort -t= P.xyz -o P.xyz")
+   os.system("sed -ri '1,2!b;1h;1!H;2!d;x;s/^([^\n]*)(.*\n)(.*)/\3\2\1/' P.xyz")
 
 if __name__ == "__main__":
     main()
