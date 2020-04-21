@@ -13,6 +13,19 @@ def main():
      [ 1.6496251748 ,       0.4052459512 ,       6.3112478726] ,
      [ 1.6496251748 ,       4.1855639485 ,       4.1922576688] ])
 
+   x_min = np.min(coords_P_phosphorene[:,0])
+   x_max = np.max(coords_P_phosphorene[:,0]) + (L-1)*a
+   y_min = np.min(coords_P_phosphorene[:,1])
+   y_max = np.max(coords_P_phosphorene[:,1]) + (L-1)*b
+
+   eps = 0.01
+
+   bond_length_H_P = 1.42
+
+   natoms = L**2*4 + 6*L
+
+   print(natoms,"\n")
+
    for i_x in range(L):
       for i_y in range(L):
 
@@ -21,6 +34,17 @@ def main():
          for i_atom in range(np.size(coords_P_phosphorene[:,0])):
              atom_coord = coords_P_phosphorene[i_atom,:] + R_vec
              print("P  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+
+             if np.abs(atom_coord[0] - x_min) <eps:
+                print("H  ", '{:12.6f}'.format(atom_coord[0]-bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+             if np.abs(atom_coord[0] - x_max) <eps:
+                print("H  ", '{:12.6f}'.format(atom_coord[0]+bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+             if np.abs(atom_coord[1] - y_min) <eps:
+                print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]-bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) )
+             if np.abs(atom_coord[1] - y_max) <eps:
+                print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]+bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) )
+
+
 
 if __name__ == "__main__":
     main()
