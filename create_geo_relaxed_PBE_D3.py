@@ -34,9 +34,13 @@ def main():
 
    bond_length_H_P = 1.42
 
-   natoms = L**2*4 + 6*L
+   n_H_atoms = 6*L
+   n_P_atoms = L**2*4
 
-   print(natoms,"\n")
+   natoms = n_H_atoms + n_P_atoms
+
+   with open('P.xyz', 'w') as f:
+      print(natoms,"\n", file=f)
 
    for i_x in range(L):
       for i_y in range(L):
@@ -45,20 +49,26 @@ def main():
 
          for i_atom in range(np.size(coords_P_phosphorene[:,0])):
              atom_coord = coords_P_phosphorene[i_atom,:] + R_vec
-             with open("P.xyz", "a") as myfile:
-               print("P  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+             with open('P.xyz', 'a') as f:
+                print("P  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) , file=f)
 
              if np.abs(atom_coord[0] - x_min) <eps:
-                print("H  ", '{:12.6f}'.format(atom_coord[0]-bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+                with open('P.xyz', 'a') as f:
+                   print("H  ", '{:12.6f}'.format(atom_coord[0]-bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]), file=f)
              if np.abs(atom_coord[0] - x_max) <eps:
-                print("H  ", '{:12.6f}'.format(atom_coord[0]+bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]) )
+                 with open('P.xyz', 'a') as f:
+                   print("H  ", '{:12.6f}'.format(atom_coord[0]+bond_length_H_P), '{:12.6f}'.format(atom_coord[1]), '{:12.6f}'.format(atom_coord[2]), file=f)
              if np.abs(atom_coord[1] - y_min) <eps:
-                print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]-bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) )
+                 with open('P.xyz', 'a') as f:
+                   print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]-bond_length_H_P), '{:12.6f}'.format(atom_coord[2]), file=f)
              if np.abs(atom_coord[1] - y_max) <eps:
-                print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]+bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) )
+                 with open('P.xyz', 'a') as f:
+                   print("H  ", '{:12.6f}'.format(atom_coord[0]), '{:12.6f}'.format(atom_coord[1]+bond_length_H_P), '{:12.6f}'.format(atom_coord[2]) , file=f)
 
    os.system("sort -t= P.xyz -o P.xyz")
-   os.system("sed -ri '1,2!b;1h;1!H;2!d;x;s/^([^\n]*)(.*\n)(.*)/\3\2\1/' P.xyz")
+   os.system("sed -ri '1,2!b;1h;1!H;2!d;x;s/^([^\\n]*)(.*\\n)(.*)/\\3\\2\\1/' P.xyz")
+
+   print("Please fix in the input file all phosphor atoms with LIST", str(n_H_atoms+1)+".."+str(natoms))
 
 if __name__ == "__main__":
     main()
