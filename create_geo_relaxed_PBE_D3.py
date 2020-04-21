@@ -69,6 +69,7 @@ def main():
    os.system("sed -ri '1,2!b;1h;1!H;2!d;x;s/^([^\\n]*)(.*\\n)(.*)/\\3\\2\\1/' P.xyz")
 
    print("Please fix in the input file all phosphor atoms with LIST", str(n_H_atoms+1)+".."+str(natoms))
+   print("Cell size could be: ABC  ", '{:4.1f}'.format(x_max-x_min+15), '{:4.1f}'.format(y_max-y_min+15), 12.0)
 
 if __name__ == "__main__":
     main()
